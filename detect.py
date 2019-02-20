@@ -134,7 +134,7 @@ if __name__ == '__main__':
     #nms:检测的iou阈值，大于阈值的重叠框被删除，只最终保留一个（改）重叠物体较多，则调高阈值，重叠物体较少，则调低阈值
     parser = argparse.ArgumentParser()
     parser.add_argument('--cfg', type=str, default='cfg/yolov3.cfg', help='cfg file path')
-    parser.add_argument('--weights', type=str, default='weights/yolov3.pt', help='path to weights file')
+    parser.add_argument('--weights', type=str, default='weights/yolov3.weights', help='path to weights file')
     parser.add_argument('--images', type=str, default='data/samples', help='path to images')
     parser.add_argument('--img-size', type=int, default=32 * 13, help='size of each image dimension')
     parser.add_argument('--conf-thres', type=float, default=0.50, help='object confidence threshold')
