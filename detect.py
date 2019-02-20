@@ -19,7 +19,7 @@ def detect(
         nms_thres=0.45,
         save_txt=False,
         save_images=True,
-        webcam=False
+        webcam=True
 ):
     device = torch_utils.select_device()    #返回运行设备(torch_utils的set_device)并打印
     if os.path.exists(output):
@@ -54,7 +54,6 @@ def detect(
 
     #除了索引i,还返回被迭代后执行__next__ return的两个值：[img_path], img（参见注释dataset.py有注释）
     for i, (path, img, im0) in enumerate(dataloader):
-        t = time.time()
         if webcam:
             print('webcam frame %g: ' % (i + 1), end='')
         else:
@@ -62,6 +61,7 @@ def detect(
         save_path = str(Path(output) / Path(path).name)
 
         # Get detections
+        t = time.time()
         img = torch.from_numpy(img).unsqueeze(0).to(device) #将ndarray转Tensor;加入了额外的维度第0维;放到gpu
         if ONNX_EXPORT:
             torch.onnx.export(model, img, 'weights/model.onnx', verbose=True)
@@ -73,6 +73,7 @@ def detect(
         pred = pred[pred[:, :, 4] > conf_thres]  # remove boxes < threshold
 
         if len(pred) > 0:   # len选取张量的第一维度（box_num）确定存在confidence大于阈值的box再NMS
+            
             # Run NMS on predictions
             '''
                 （atten）这里的nms实际含有3步：
@@ -83,7 +84,6 @@ def detect(
             #pred.unsqueeze(0)给二维张量在第0维扩充一个维度
             #detections维度1为：(x1, y1, x2, y2, obj_conf, class_prob, class_pred)，按照标签&confidence排序
             detections = non_max_suppression(pred.unsqueeze(0), conf_thres, nms_thres)[0]
-
             # Rescale boxes from 416 to true image size416到真实尺寸
             detections[:, :4] = scale_coords(img_size, detections[:, :4], im0.shape)
 
@@ -109,14 +109,16 @@ def detect(
                 plot_one_box([x1, y1, x2, y2], im0, label=label, color=colors[int(cls)])
 
         dt = time.time() - t
-        print('Done. (%.3fs)' % dt)
+        print('Done. (%.3fs)' % dt, end=' ')
 
         if save_images:  # Save generated image with detections
             cv2.imwrite(save_path, im0)
 
         if webcam:  # Show live webcam
-            cv2.imshow(weights + ' - %.2f FPS' % (1 / dt), im0)
-
+#            cv2.imshow(weights + ' - %.2f FPS' % (1 / dt), im0)#闪烁，将FPS打印即可
+             print(' %.2f FPS' % (1 / dt))
+             cv2.imshow('detection', im0)
+             
     if save_images and (platform == 'darwin'):  # linux/macos
         os.system('open ' + output + ' ' + save_path)
 
