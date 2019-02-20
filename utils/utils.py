@@ -189,14 +189,14 @@ def compute_ap(recall, precision):
 
 
 def bbox_iou(box1, box2, x1y1x2y2=True):
-"""
-    Returns the IoU of two bounding boxes
-    （atten）1.这里的iou计算设计了两种输入方式，默认左上和右下的点（还可接受（x,y,w,h）），通过参数x1y1x2y2=True设置
-            2.下面的坐标提取box1[:, 0]，因为传入的box就不是一维列表，而是二维张量！其第0维度是代表每个box，第一维度才是参数，
-              所以计算返回的是一个n维张量，每一维是一个gt的box和所有预测box计算的iou
-     (re)返回值这里很机智：return inter_area / (b1_area + b2_area - inter_area + 1e-16)
-        因为万一出现了预测box和真实gt完全重合，那么iou出现分母为0而报错。这里加一个极小的量可以避免
-"""
+    """
+        Returns the IoU of two bounding boxes
+        （atten）1.这里的iou计算设计了两种输入方式，默认左上和右下的点（还可接受（x,y,w,h）），通过参数x1y1x2y2=True设置
+                2.下面的坐标提取box1[:, 0]，因为传入的box就不是一维列表，而是二维张量！其第0维度是代表每个box，第一维度才是参数，
+                  所以计算返回的是一个n维张量，每一维是一个gt的box和所有预测box计算的iou
+         (re)返回值这里很机智：return inter_area / (b1_area + b2_area - inter_area + 1e-16)
+            因为万一出现了预测box和真实gt完全重合，那么iou出现分母为0而报错。这里加一个极小的量可以避免
+    """
     if x1y1x2y2:
         # Get the coordinates of bounding boxes
         b1_x1, b1_y1, b1_x2, b1_y2 = box1[:, 0], box1[:, 1], box1[:, 2], box1[:, 3]
