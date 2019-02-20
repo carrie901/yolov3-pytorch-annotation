@@ -74,12 +74,12 @@ def detect(
 
         if len(pred) > 0:   # len选取张量的第一维度（box_num）确定存在confidence大于阈值的box再NMS
             # Run NMS on predictions
-                '''
+            '''
                 （atten）这里的nms实际含有3步：
                 1.最大类概率提取，将每个box的80个类别信息压缩为1个，取其最大概率的一个类，并且加上该类的标签编号，所以85->7
                 2.thre筛选掉confidence小于阈值box
                 3.NMS筛掉重叠度高于阈值nms_thre的框
-                '''
+            '''
             #pred.unsqueeze(0)给二维张量在第0维扩充一个维度
             #detections维度1为：(x1, y1, x2, y2, obj_conf, class_prob, class_pred)，按照标签&confidence排序
             detections = non_max_suppression(pred.unsqueeze(0), conf_thres, nms_thres)[0]
