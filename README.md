@@ -1,27 +1,10 @@
 # yolov3-pytorch-annotation
-annotation and specification for yolov3
+**annotation** and **specification** for yolov3   
+**attention**:Inputs should be labeld the same as COCO (yolo format):normalized && cxywh  
 
-refer to:https://github.com/ultralytics/yolov3
-可借鉴的部分标记re，需要注意的地方标注atten， 可改动的地方标注（改）
+refer to:https://github.com/ultralytics/yolov3   
 
-训练自己的数据集（单类为例）
-1.cfg文件修改：
-    coco.data  : classes=1；train/valid路径为txt，其包含了训练/验证的图片文件路径，一行一个
-    yolov3.cfg : test/train参数；YOLO层之前一层的filter为18；YOLO层calss=1
-2.data文件修改：
-    coco.names ：改为自己的类
-    sampel : 下放待检测图片
-3.weights修改：
-    放入darknet初始化权重即可
-4.train.py
-    注释掉函数最后的map那两段（占时间）
-    bs合理设置
-    epoch设置
-    运行时键入multi-scale，开启多尺度训练
-5.detect.py
-    函数体webcom设置摄像头
-    根据需要设置阈值
-    weights路径选择权重
-    
-    
-
+ This is my loss curls with testing on single picture for 100 epochs,it does converge well.   
+ Run train-vis.py to monitor loss.   
+ 
+![Image text](https://github.com/ming71/yolov3-pytorch-annotation/blob/master/notebook/2019-02-22%2022-59-24%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png) 
